@@ -25,6 +25,8 @@ public class EnhancedHealth extends JavaPlugin
     private IStorage storage;
     private HealthDataManager healthDataManager;
 
+    private volatile boolean migrating = false;
+
     @Override
     public void onLoad()
     {
@@ -65,6 +67,7 @@ public class EnhancedHealth extends JavaPlugin
 
     public void migrate(CommandSender sender)
     {
+        migrating = true;
         storage.getAllData((result ->
         {
             Config.StorageType from;
@@ -84,7 +87,13 @@ public class EnhancedHealth extends JavaPlugin
             }
             result.forEach(storage::saveStorage);
             Lang.DATA_MIGRATED.sendMessage(sender, from.name(), to.name());
+            migrating = false;
         }));
+    }
+
+    public boolean isMigrating()
+    {
+        return migrating;
     }
 
     public LangFile getLangFile()

@@ -26,7 +26,20 @@ public class StatusCommand extends HealthCommand
         String playerName;
         if (args.length > 0)
         {
-            playerName = args[0];
+            if (sender.hasPermission("enhancedhealth.command.status.other"))
+            {
+                playerName = args[0];
+            } else
+            {
+                if (sender instanceof Player)
+                {
+                    playerName = sender.getName();
+                } else
+                {
+                    Lang.COMMAND_ONLY_RUN_BY_PLAYERS.sendMessage(sender);
+                    return;
+                }
+            }
         } else
         {
             if (sender instanceof Player)

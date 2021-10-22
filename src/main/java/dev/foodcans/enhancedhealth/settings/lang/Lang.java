@@ -25,6 +25,7 @@ public enum Lang
 
     PLAYER_STATUS("Player-Status", "&8<&9Health&8> &7Status for &f{0}\n&8<&9Health&8> &7Current health: &f{1}\n&8<&9Health&8> &7Extra max health: &f{2}"),
 
+    MIGRATION_IN_PROGRESS("Migration-In-Progress", "&cData migration in progress!"),
     MIGRATE_NO_PLAYERS("Migrate-No-Players", "&8<&cHealth&8> &7This command may only be run with no players online. Please put your server into maintenance mode to prevent player's from joining while migration is in progress!"),
     DATA_MIGRATED("Data-Migrated", "&8<&9Health&8> &7Successfully migrated data from &f{0} &7to &f{1}&7. Please set your desired storage type in the config before restarting."),
 
@@ -63,6 +64,11 @@ public enum Lang
             message = message.replace("{" + i + "}", replacements[i]);
         }
         return message;
+    }
+
+    public String getValue()
+    {
+        return EnhancedHealth.getInstance().getLangFile().getValue(path, def);
     }
 
     public String getPath()
