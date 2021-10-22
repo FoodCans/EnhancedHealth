@@ -106,7 +106,6 @@ public class HealthDataManager
             healthData.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
         }
         player.setHealth(healthData.getHealth());
-//        setCurrentHealth(player.getUniqueId(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
         if (Config.SCALE_HEALTH)
         {
             player.setHealthScale(Config.HEALTH_SCALE_VALUE);

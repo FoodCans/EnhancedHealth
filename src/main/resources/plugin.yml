@@ -1,9 +1,9 @@
 name: EnhancedHealth
 author: FoodCans
 version: ${project.version}
-api-version: 1.17
 main: dev.foodcans.enhancedhealth.EnhancedHealth
-softdepend: [PlaceholderAPI]
-libraries: [com.zaxxer:HikariCP:4.0.3, com.google.code.gson:gson:2.8.8]
+api-version: 1.13
+libraries: ['com.zaxxer:HikariCP:4.0.3', 'com.google.code.gson:gson:2.8.8']
 commands:
-  health: {}
+  health:
+    description: Manage player health data

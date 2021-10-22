@@ -2,7 +2,6 @@ package dev.foodcans.enhancedhealth.listener;
 
 import dev.foodcans.enhancedhealth.EnhancedHealth;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

@@ -3,11 +3,9 @@ package dev.foodcans.enhancedhealth.command.admin;
 import dev.foodcans.enhancedhealth.EnhancedHealth;
 import dev.foodcans.enhancedhealth.command.HealthCommand;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;
-import dev.foodcans.enhancedhealth.settings.Config;
 import dev.foodcans.enhancedhealth.settings.lang.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.Collections;
 
