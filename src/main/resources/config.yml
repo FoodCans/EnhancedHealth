@@ -1,0 +1,43 @@
+#########################################################################################################################
+# ███████╗███╗░░██╗██╗░░██╗░█████╗░███╗░░██╗░█████╗░███████╗██████╗░  ██╗░░██╗███████╗░█████╗░██╗░░░░░████████╗██╗░░██╗ #
+# ██╔════╝████╗░██║██║░░██║██╔══██╗████╗░██║██╔══██╗██╔════╝██╔══██╗  ██║░░██║██╔════╝██╔══██╗██║░░░░░╚══██╔══╝██║░░██║ #
+# █████╗░░██╔██╗██║███████║███████║██╔██╗██║██║░░╚═╝█████╗░░██║░░██║  ███████║█████╗░░███████║██║░░░░░░░░██║░░░███████║ #
+# ██╔══╝░░██║╚████║██╔══██║██╔══██║██║╚████║██║░░██╗██╔══╝░░██║░░██║  ██╔══██║██╔══╝░░██╔══██║██║░░░░░░░░██║░░░██╔══██║ #
+# ███████╗██║░╚███║██║░░██║██║░░██║██║░╚███║╚█████╔╝███████╗██████╔╝  ██║░░██║███████╗██║░░██║███████╗░░░██║░░░██║░░██║ #
+# ╚══════╝╚═╝░░╚══╝╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚══╝░╚════╝░╚══════╝╚═════╝░  ╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚══════╝░░░╚═╝░░░╚═╝░░╚═╝ #
+#########################################################################################################################
+
+####################
+# Storage Settings #
+####################
+
+# Json, MySQL
+Storage-Type: Json
+Migrate-Storage: false
+MySQL:
+  Url: 'localhost:3306/mc'
+  Username: 'root'
+  Password: ''
+  Allow-Public-Key-Retrieval: true
+  Use-SSL: false
+
+####################
+# General Settings #
+####################
+# NOTE: Values specified below are health values, not amount of hearts! Every 2 health = 1 heart
+# unless health is scaled
+
+# Visually scale player's max health?
+Scale-Health: false
+# Visually represents how many hearts the player will have. Hearts = Health-Scale / 2
+Health-Scale-Value: 20
+# Set a limit on the maximum extra health a player can get. Note: Must be at or below 2048
+Max-Extra-Health-Allowed: 200
+# Default health a player gets when joining the server
+Base-Health: 20
+# Players with the specified permission group will automatically have their base extra health increased
+# by the correlating amount. Values can also be negative. If a player has multiple groups listed below
+# the group with the most extra health will be used.
+Permission-Extra-Health:
+  donator: 10
+
