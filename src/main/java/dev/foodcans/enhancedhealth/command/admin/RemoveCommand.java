@@ -2,7 +2,6 @@ package dev.foodcans.enhancedhealth.command.admin;
 
 import dev.foodcans.enhancedhealth.command.HealthCommand;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;
-import dev.foodcans.enhancedhealth.settings.Config;
 import dev.foodcans.enhancedhealth.settings.lang.Lang;
 import dev.foodcans.enhancedhealth.util.UUIDFetcher;
 import org.bukkit.Bukkit;
@@ -38,7 +37,7 @@ public class RemoveCommand extends HealthCommand
             Player player = Bukkit.getPlayer(uuid);
             if (player != null)
             {
-                healthDataManager.applyMaxHealthToPlayer(player);
+                healthDataManager.applyMaxHealthToPlayer(player, true);
             }
         } else
         {

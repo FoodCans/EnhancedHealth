@@ -1,7 +1,9 @@
 package dev.foodcans.enhancedhealth.command.admin;
 
+import dev.foodcans.enhancedhealth.EnhancedHealth;
 import dev.foodcans.enhancedhealth.command.HealthCommand;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;
+import dev.foodcans.enhancedhealth.settings.Config;
 import dev.foodcans.enhancedhealth.settings.lang.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -9,39 +11,35 @@ import org.bukkit.entity.Player;
 
 import java.util.Collections;
 
-public class RefreshCommand extends HealthCommand
+public class MigrateCommand extends HealthCommand
 {
-    public RefreshCommand(HealthDataManager healthDataManager)
+    public MigrateCommand(HealthDataManager healthDataManager)
     {
-        super(healthDataManager, "refresh", "enhancedhealth.command.refresh", Collections.singletonList("<player>"));
+        super(healthDataManager, "migrate", "enhancedhealth.command.migrate", Collections.emptyList());
     }
 
     @Override
     public void onCommand(CommandSender sender, String... args)
     {
-        String playerName = args[0];
-        Player player = Bukkit.getPlayer(playerName);
-        if (player != null)
+        if (Bukkit.getOnlinePlayers().size() > 0)
         {
-            healthDataManager.applyMaxHealthToPlayer(player, true);
-            healthDataManager.applyHealthToPlayer(player);
-            Lang.PLAYER_REFRESHED.sendMessage(sender, player.getName());
-        } else
-        {
-            Lang.PLAYER_NOT_FOUND.sendMessage(sender, playerName);
+            Lang.MIGRATE_NO_PLAYERS.sendMessage(sender);
+            return;
         }
+
+        EnhancedHealth.getInstance().migrate(sender);
     }
 
     @Override
     public int getMinArgs()
     {
-        return 1;
+        return 0;
     }
 
     @Override
     public int getMaxArgs()
     {
-        return 1;
+        return 0;
     }
 
     @Override

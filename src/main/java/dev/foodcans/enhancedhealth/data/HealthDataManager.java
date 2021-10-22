@@ -33,14 +33,13 @@ public class HealthDataManager
     public Result addExtraHealth(UUID uuid, double extraHealth)
     {
         extraHealth = round(extraHealth);
-        HealthData healthData = healthDataMap.getOrDefault(uuid, new HealthData(uuid));
+        HealthData healthData = healthDataMap.get(uuid);
         double combined = healthData.getExtraHealth() + extraHealth;
         if (combined > Config.MAX_EXTRA_HEALTH_ALLOWED)
         {
             return Result.OVER_MAX;
         }
         healthData.setExtraHealth(Math.min(2048, combined));
-        healthDataMap.put(uuid, healthData);
         EnhancedHealth.getInstance().getStorage().saveStorage(healthData);
         return Result.SUCCESS;
     }
@@ -48,14 +47,13 @@ public class HealthDataManager
     public Result removeExtraHealth(UUID uuid, double extraHealth)
     {
         extraHealth = round(extraHealth);
-        HealthData healthData = healthDataMap.getOrDefault(uuid, new HealthData(uuid));
+        HealthData healthData = healthDataMap.get(uuid);
         double combined = healthData.getExtraHealth() - extraHealth;
         if (combined < 0)
         {
             return Result.LESS_THAN_ZERO;
         }
         healthData.setExtraHealth(combined);
-        healthDataMap.put(uuid, healthData);
         EnhancedHealth.getInstance().getStorage().saveStorage(healthData);
         return Result.SUCCESS;
     }
@@ -63,7 +61,7 @@ public class HealthDataManager
     public Result setExtraHealth(UUID uuid, double extraHealth)
     {
         extraHealth = round(extraHealth);
-        HealthData healthData = healthDataMap.getOrDefault(uuid, new HealthData(uuid));
+        HealthData healthData = healthDataMap.get(uuid);
         if (extraHealth < 0)
         {
             return Result.LESS_THAN_ZERO;
@@ -72,7 +70,6 @@ public class HealthDataManager
             return Result.OVER_MAX;
         }
         healthData.setExtraHealth(extraHealth);
-        healthDataMap.put(uuid, healthData);
         EnhancedHealth.getInstance().getStorage().saveStorage(healthData);
         return Result.SUCCESS;
     }
@@ -80,32 +77,42 @@ public class HealthDataManager
     public void setCurrentHealth(UUID uuid, double health)
     {
         health = round(health);
-        HealthData healthData = healthDataMap.getOrDefault(uuid, new HealthData(uuid));
+        HealthData healthData = healthDataMap.get(uuid);
         healthData.setHealth(health);
-        healthDataMap.put(uuid, healthData);
         EnhancedHealth.getInstance().getStorage().saveStorage(healthData);
     }
 
-    public void applyMaxHealthToPlayer(Player player)
+    public void applyMaxHealthToPlayer(Player player, boolean resetHealth)
     {
         HealthData healthData = healthDataMap.get(player.getUniqueId());
-        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getPermissiveBonus(player) + Config.BASE_HEALTH + healthData.getExtraHealth());
+        double extra = Math.min(Config.MAX_EXTRA_HEALTH_ALLOWED, getPermissiveBonus(player) + healthData.getExtraHealth());
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(Config.BASE_HEALTH + extra);
         if (player.getHealth() > player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue())
         {
             setCurrentHealth(player.getUniqueId(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
             player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
         }
-        healthData.setHealth(player.getHealth());
+        if (resetHealth)
+        {
+            healthData.setHealth(player.getHealth());
+        }
     }
 
     public void applyHealthToPlayer(Player player)
     {
         HealthData healthData = healthDataMap.get(player.getUniqueId());
+        if (healthData.getHealth() > player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue())
+        {
+            healthData.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+        }
         player.setHealth(healthData.getHealth());
-        setCurrentHealth(player.getUniqueId(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+//        setCurrentHealth(player.getUniqueId(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
         if (Config.SCALE_HEALTH)
         {
             player.setHealthScale(Config.HEALTH_SCALE_VALUE);
+        } else
+        {
+            player.setHealthScaled(false);
         }
     }
 
@@ -136,7 +143,7 @@ public class HealthDataManager
         return bonus;
     }
 
-    private double round(double input)
+    protected static double round(double input)
     {
         return new BigDecimal(input).setScale(1, RoundingMode.HALF_EVEN).doubleValue();
     }

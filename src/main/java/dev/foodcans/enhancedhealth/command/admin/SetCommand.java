@@ -38,7 +38,7 @@ public class SetCommand extends HealthCommand
             Player player = Bukkit.getPlayer(uuid);
             if (player != null)
             {
-                healthDataManager.applyMaxHealthToPlayer(player);
+                healthDataManager.applyMaxHealthToPlayer(player, true);
             }
         } else if (result == HealthDataManager.Result.OVER_MAX)
         {

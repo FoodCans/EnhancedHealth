@@ -10,7 +10,6 @@ import java.util.Map;
 public class Config
 {
     public static StorageType STORAGE_TYPE;
-    public static boolean MIGRATE_STORAGE;
 
     public static String DB_URL;
     public static String DB_USERNAME;
@@ -27,7 +26,6 @@ public class Config
     public static void load(FileConfiguration config)
     {
         STORAGE_TYPE = StorageType.valueOf(config.getString("Storage-Type").toUpperCase(Locale.ROOT));
-        MIGRATE_STORAGE = config.getBoolean("Migrate-Storage");
 
         ConfigurationSection mySQLSection = config.getConfigurationSection("MySQL");
         DB_URL = mySQLSection.getString("Url");

@@ -5,7 +5,6 @@ import dev.foodcans.enhancedhealth.EnhancedHealth;
 import dev.foodcans.enhancedhealth.data.HealthData;
 import dev.foodcans.enhancedhealth.util.Callback;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +13,8 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class JsonStorage implements IStorage
@@ -37,7 +38,6 @@ public class JsonStorage implements IStorage
         {
             HealthData healthData = loadData(uuid);
             Bukkit.getScheduler().runTask(EnhancedHealth.getInstance(), () -> callback.call(healthData));
-            Bukkit.broadcastMessage(ChatColor.GREEN + "Data loaded for player: " + uuid);
         });
     }
 
@@ -45,9 +45,9 @@ public class JsonStorage implements IStorage
     public void saveStorage(HealthData healthData)
     {
         Bukkit.getScheduler().runTaskAsynchronously(EnhancedHealth.getInstance(), () -> saveData(healthData));
-        Bukkit.broadcastMessage(ChatColor.GREEN + "Data saved for player: " + healthData.getUuid());
     }
 
+    @Override
     public HealthData loadData(UUID uuid)
     {
         Path path = Paths.get(playersFolder.getAbsolutePath(), uuid.toString() + ".json");
@@ -65,6 +65,7 @@ public class JsonStorage implements IStorage
         return null;
     }
 
+    @Override
     public void saveData(HealthData healthData)
     {
         Path path = Paths.get(playersFolder.getAbsolutePath(), healthData.getUuid().toString() + ".json");
@@ -85,5 +86,22 @@ public class JsonStorage implements IStorage
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void getAllData(Callback<Set<HealthData>> callback)
+    {
+        Bukkit.getScheduler().runTaskAsynchronously(EnhancedHealth.getInstance(), () ->
+        {
+            Set<HealthData> data = new HashSet<>();
+            for (File file : playersFolder.listFiles())
+            {
+                if (file.isFile())
+                {
+                    data.add(loadData(UUID.fromString(file.getName().replace(".json", ""))));
+                }
+            }
+           Bukkit.getScheduler().runTask(EnhancedHealth.getInstance(), () -> callback.call(data));
+        });
     }
 }

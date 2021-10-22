@@ -67,11 +67,12 @@ public class CommandManager implements TabExecutor
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String alias, @NotNull String[] args)
     {
         List<String> completions = new ArrayList<>();
-        if (args.length == 0)
+        if (args.length == 1)
         {
+            String arg = args[0].toLowerCase();
             for (HealthCommand command : commands)
             {
-                if (permissionCheck(sender, command.getPermission(), true))
+                if (command.getName().toLowerCase().startsWith(arg) && permissionCheck(sender, command.getPermission(), true))
                 {
                     completions.add(command.getName());
                 }

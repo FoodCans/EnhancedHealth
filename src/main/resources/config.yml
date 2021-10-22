@@ -13,7 +13,6 @@
 
 # Json, MySQL
 Storage-Type: Json
-Migrate-Storage: false
 MySQL:
   Url: 'localhost:3306/mc'
   Username: 'root'

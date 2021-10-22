@@ -3,6 +3,7 @@ package dev.foodcans.enhancedhealth.storage;
 import dev.foodcans.enhancedhealth.data.HealthData;
 import dev.foodcans.enhancedhealth.util.Callback;
 
+import java.util.Set;
 import java.util.UUID;
 
 public interface IStorage
@@ -14,4 +15,6 @@ public interface IStorage
     HealthData loadData(UUID uuid);
 
     void saveData(HealthData healthData);
+
+    void getAllData(Callback<Set<HealthData>> callback);
 }

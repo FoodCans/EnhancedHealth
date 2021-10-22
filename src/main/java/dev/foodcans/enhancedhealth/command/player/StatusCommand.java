@@ -3,10 +3,10 @@ package dev.foodcans.enhancedhealth.command.player;
 import dev.foodcans.enhancedhealth.command.HealthCommand;
 import dev.foodcans.enhancedhealth.data.HealthData;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;
+import dev.foodcans.enhancedhealth.settings.Config;
 import dev.foodcans.enhancedhealth.settings.lang.Lang;
 import dev.foodcans.enhancedhealth.util.UUIDFetcher;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -52,7 +52,8 @@ public class StatusCommand extends HealthCommand
             healthData.setHealth(player.getHealth());
             permissiveBonus = healthDataManager.getPermissiveBonus(player);
         }
-        Lang.PLAYER_STATUS.sendMessage(sender, playerName, Double.toString(healthData.getHealth()), Double.toString(healthData.getExtraHealth() + permissiveBonus));
+        double extra = Math.min(Config.MAX_EXTRA_HEALTH_ALLOWED, permissiveBonus + healthData.getExtraHealth());
+        Lang.PLAYER_STATUS.sendMessage(sender, playerName, Double.toString(healthData.getHealth()), Double.toString(extra));
     }
 
     @Override

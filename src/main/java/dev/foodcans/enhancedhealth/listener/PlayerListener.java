@@ -2,6 +2,7 @@ package dev.foodcans.enhancedhealth.listener;
 
 import dev.foodcans.enhancedhealth.EnhancedHealth;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,7 +26,7 @@ public class PlayerListener implements Listener
         EnhancedHealth.getInstance().getStorage().loadStorage(player.getUniqueId(), (healthData) ->
         {
             healthDataManager.addHealthData(healthData);
-            healthDataManager.applyMaxHealthToPlayer(player);
+            healthDataManager.applyMaxHealthToPlayer(player, false);
             healthDataManager.applyHealthToPlayer(player);
         });
     }

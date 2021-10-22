@@ -25,7 +25,7 @@ public class ReloadCommand extends HealthCommand
         Config.load(EnhancedHealth.getInstance().getConfig());
         for (Player player : Bukkit.getOnlinePlayers())
         {
-            healthDataManager.applyMaxHealthToPlayer(player);
+            healthDataManager.applyMaxHealthToPlayer(player, true);
             healthDataManager.applyHealthToPlayer(player);
         }
         Lang.CONFIG_RELOADED.sendMessage(sender);

@@ -4,6 +4,8 @@ import dev.foodcans.enhancedhealth.settings.Config;
 
 import java.util.UUID;
 
+import static dev.foodcans.enhancedhealth.data.HealthDataManager.round;
+
 public class HealthData
 {
     private final UUID uuid;
@@ -29,7 +31,7 @@ public class HealthData
 
     public double getExtraHealth()
     {
-        return extraHealth;
+        return round(extraHealth);
     }
 
     public void setExtraHealth(double extraHealth)
@@ -39,7 +41,7 @@ public class HealthData
 
     public double getHealth()
     {
-        return health;
+        return round(health);
     }
 
     public void setHealth(double health)
