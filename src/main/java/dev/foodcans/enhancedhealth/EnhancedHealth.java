@@ -61,6 +61,7 @@ public class EnhancedHealth extends JavaPlugin
     {
         for (Player player : Bukkit.getOnlinePlayers())
         {
+            healthDataManager.getHealthData(player.getUniqueId()).setHealth(player.getHealth());
             storage.saveData(healthDataManager.getHealthData(player.getUniqueId()));
         }
     }
