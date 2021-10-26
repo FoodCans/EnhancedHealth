@@ -2,22 +2,26 @@ package dev.foodcans.enhancedhealth.data;
 
 import dev.foodcans.enhancedhealth.EnhancedHealth;
 import dev.foodcans.enhancedhealth.settings.Config;
+import dev.foodcans.enhancedhealth.settings.lang.Lang;
+import dev.foodcans.enhancedhealth.util.StringUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class HealthDataManager
 {
     private final Map<UUID, HealthData> healthDataMap;
+    private final Set<UUID> lowHealthSet;
 
     public HealthDataManager()
     {
         this.healthDataMap = new HashMap<>();
+        this.lowHealthSet = new HashSet<>();
+        this.startLowHealthTask();
     }
 
     public void addHealthData(HealthData healthData)
@@ -142,9 +146,43 @@ public class HealthDataManager
         return bonus;
     }
 
+    public void setLowHealth(UUID uuid, boolean hasLowHealth)
+    {
+        if (hasLowHealth)
+        {
+            lowHealthSet.add(uuid);
+        } else
+        {
+            lowHealthSet.remove(uuid);
+        }
+    }
+
     protected static double round(double input)
     {
         return new BigDecimal(input).setScale(1, RoundingMode.HALF_EVEN).doubleValue();
+    }
+
+    private void startLowHealthTask()
+    {
+        Bukkit.getScheduler().runTaskTimer(EnhancedHealth.getInstance(), () ->
+        {
+            if (!Config.SHOW_LOW_HEALTH)
+            {
+                return;
+            }
+            for (UUID uuid : healthDataMap.keySet())
+            {
+                if (lowHealthSet.contains(uuid))
+                {
+                    Player player = Bukkit.getPlayer(uuid);
+                    if (player == null)
+                    {
+                        continue;
+                    }
+                    player.sendTitle(" ", StringUtil.translate(Lang.LOW_HEALTH.getValue()), -1, -1, -1);
+                }
+            }
+        }, 0L, 20L);
     }
 
     public enum Result

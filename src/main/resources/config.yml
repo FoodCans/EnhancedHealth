@@ -26,6 +26,10 @@ MySQL:
 # NOTE: Values specified below are health values, not amount of hearts! Every 2 health = 1 heart
 # unless health is scaled
 
+# Show a low health message as a title message
+Show-Low-Health-Indicator: true
+# How much health should a player have before sending them the low health message (percentage: 1-100)
+Low-Health-Threshold: 10
 # Visually scale player's max health?
 Scale-Health: false
 # Visually represents how many hearts the player will have. Hearts = Health-Scale / 2

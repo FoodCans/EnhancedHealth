@@ -29,11 +29,13 @@ public enum Lang
     MIGRATE_NO_PLAYERS("Migrate-No-Players", "&8<&cHealth&8> &7This command may only be run with no players online. Please put your server into maintenance mode to prevent player's from joining while migration is in progress!"),
     DATA_MIGRATED("Data-Migrated", "&8<&9Health&8> &7Successfully migrated data from &f{0} &7to &f{1}&7. Please set your desired storage type in the config before restarting."),
 
+    LOW_HEALTH("Low-Health", "&cLow Health!"),
+
     PLAYER_NOT_FOUND("Player-Not-Found", "&8<&cHealth&8> &7Player &f{0} &7not found!"),
     HELP("Help", "&8<&9Health&8> &7Available commands: &f/health {0}"),
     HELP_NONE("Help-None", "&8<&cHealth&8> &7No available commands!"),
     NOT_ENOUGH_ARGS("Not-Enough-Args", "&8<&cHealth&8> &7Not enough args: &f{0}"),
-    TOO_MANY_ARGS("Too-Many-Args", "&8<&cParkour&8> &7Too many args: &f{0}"),
+    TOO_MANY_ARGS("Too-Many-Args", "&8<&cHealth&8> &7Too many args: &f{0}"),
     COMMAND_ONLY_RUN_BY_PLAYERS("Command-Only-Run-By-Players", "&8<&cHealth&8> &7This command can only be run by players."),
     LIST_COMMANDS("List-Commands", "&8<&cHealth&8> &7To view a list of commands type: &f/health help"),
     COMMAND_NOT_FOUND("Command-Not-Found", "&8<&cHealth&8> &7Command not found, to view a list of commands type: &f/health help"),
@@ -58,7 +60,7 @@ public enum Lang
 
     private String replace(String... replacements)
     {
-        String message = EnhancedHealth.getInstance().getLangFile().getValue(path, def);
+        String message = getValue();
         for (int i = 0; i < replacements.length; i++)
         {
             message = message.replace("{" + i + "}", replacements[i]);
