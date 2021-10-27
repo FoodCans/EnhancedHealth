@@ -1,19 +1,19 @@
 package dev.foodcans.enhancedhealth.command.admin;
 
 import dev.foodcans.enhancedhealth.EnhancedHealth;
-import dev.foodcans.enhancedhealth.command.HealthCommand;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;
 import dev.foodcans.enhancedhealth.settings.lang.Lang;
+import dev.foodcans.pluginutils.command.SubCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
 
-public class MigrateCommand extends HealthCommand
+public class MigrateCommand extends SubCommand
 {
-    public MigrateCommand(HealthDataManager healthDataManager)
+    public MigrateCommand()
     {
-        super(healthDataManager, "migrate", "enhancedhealth.command.migrate", Collections.emptyList());
+        super("migrate", "enhancedhealth.command.migrate", Collections.emptyList());
     }
 
     @Override

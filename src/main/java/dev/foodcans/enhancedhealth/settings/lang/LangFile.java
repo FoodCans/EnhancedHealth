@@ -41,7 +41,9 @@ public class LangFile
             for (Lang lang : Lang.values())
             {
                 if (!config.contains(lang.getPath()))
+                {
                     config.set(lang.getPath(), lang.getDefault());
+                }
             }
 
             config.save(this.file);

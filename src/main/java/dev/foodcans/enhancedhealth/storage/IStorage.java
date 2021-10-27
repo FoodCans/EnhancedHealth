@@ -1,7 +1,7 @@
 package dev.foodcans.enhancedhealth.storage;
 
 import dev.foodcans.enhancedhealth.data.HealthData;
-import dev.foodcans.enhancedhealth.util.Callback;
+import dev.foodcans.pluginutils.Callback;
 
 import java.util.Set;
 import java.util.UUID;

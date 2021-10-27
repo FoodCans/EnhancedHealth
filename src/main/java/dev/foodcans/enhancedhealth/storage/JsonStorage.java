@@ -3,7 +3,7 @@ package dev.foodcans.enhancedhealth.storage;
 import com.google.gson.Gson;
 import dev.foodcans.enhancedhealth.EnhancedHealth;
 import dev.foodcans.enhancedhealth.data.HealthData;
-import dev.foodcans.enhancedhealth.util.Callback;
+import dev.foodcans.pluginutils.Callback;
 import org.bukkit.Bukkit;
 
 import java.io.File;
@@ -44,7 +44,8 @@ public class JsonStorage implements IStorage
     @Override
     public void saveStorage(HealthData healthData)
     {
-        Bukkit.getScheduler().runTaskAsynchronously(EnhancedHealth.getInstance(), () -> saveData(healthData));
+        Bukkit.getScheduler()
+                .runTaskAsynchronously(EnhancedHealth.getInstance(), () -> saveData(healthData));
     }
 
     @Override
@@ -68,7 +69,8 @@ public class JsonStorage implements IStorage
     @Override
     public void saveData(HealthData healthData)
     {
-        Path path = Paths.get(playersFolder.getAbsolutePath(), healthData.getUuid().toString() + ".json");
+        Path path = Paths.get(playersFolder.getAbsolutePath(),
+                healthData.getUuid().toString() + ".json");
         if (!path.toFile().exists())
         {
             try
@@ -101,7 +103,7 @@ public class JsonStorage implements IStorage
                     data.add(loadData(UUID.fromString(file.getName().replace(".json", ""))));
                 }
             }
-           Bukkit.getScheduler().runTask(EnhancedHealth.getInstance(), () -> callback.call(data));
+            Bukkit.getScheduler().runTask(EnhancedHealth.getInstance(), () -> callback.call(data));
         });
     }
 }

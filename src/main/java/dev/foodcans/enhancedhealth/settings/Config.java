@@ -44,7 +44,8 @@ public class Config
         BASE_HEALTH = config.getDouble("Base-Health");
 
         PERMISSION_GROUP_MAP = new HashMap<>();
-        ConfigurationSection permissionSection = config.getConfigurationSection("Permission-Extra-Health");
+        ConfigurationSection permissionSection = config.getConfigurationSection(
+                "Permission-Extra-Health");
         for (String group : permissionSection.getKeys(false))
         {
             PERMISSION_GROUP_MAP.put(group, permissionSection.getDouble(group));

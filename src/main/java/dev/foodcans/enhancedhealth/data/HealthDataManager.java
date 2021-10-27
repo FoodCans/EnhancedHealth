@@ -3,7 +3,6 @@ package dev.foodcans.enhancedhealth.data;
 import dev.foodcans.enhancedhealth.EnhancedHealth;
 import dev.foodcans.enhancedhealth.settings.Config;
 import dev.foodcans.enhancedhealth.settings.lang.Lang;
-import dev.foodcans.enhancedhealth.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -11,6 +10,8 @@ import org.bukkit.entity.Player;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+
+import static dev.foodcans.pluginutils.PluginUtils.Strings.translateColor;
 
 public class HealthDataManager
 {
@@ -22,6 +23,11 @@ public class HealthDataManager
         this.healthDataMap = new HashMap<>();
         this.lowHealthSet = new HashSet<>();
         this.startLowHealthTask();
+    }
+
+    protected static double round(double input)
+    {
+        return new BigDecimal(input).setScale(1, RoundingMode.HALF_EVEN).doubleValue();
     }
 
     public void addHealthData(HealthData healthData)
@@ -89,11 +95,13 @@ public class HealthDataManager
     public void applyMaxHealthToPlayer(Player player, boolean resetHealth)
     {
         HealthData healthData = healthDataMap.get(player.getUniqueId());
-        double extra = Math.min(Config.MAX_EXTRA_HEALTH_ALLOWED, getPermissiveBonus(player) + healthData.getExtraHealth());
+        double extra = Math.min(Config.MAX_EXTRA_HEALTH_ALLOWED,
+                getPermissiveBonus(player) + healthData.getExtraHealth());
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(Config.BASE_HEALTH + extra);
         if (player.getHealth() > player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue())
         {
-            setCurrentHealth(player.getUniqueId(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+            setCurrentHealth(player.getUniqueId(),
+                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
             player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
         }
         if (resetHealth)
@@ -157,11 +165,6 @@ public class HealthDataManager
         }
     }
 
-    protected static double round(double input)
-    {
-        return new BigDecimal(input).setScale(1, RoundingMode.HALF_EVEN).doubleValue();
-    }
-
     private void startLowHealthTask()
     {
         Bukkit.getScheduler().runTaskTimer(EnhancedHealth.getInstance(), () ->
@@ -179,7 +182,7 @@ public class HealthDataManager
                     {
                         continue;
                     }
-                    player.sendTitle(" ", StringUtil.translate(Lang.LOW_HEALTH.getValue()), -1, -1, -1);
+                    player.sendTitle(" ", translateColor(Lang.LOW_HEALTH.getValue()), 10, 10, 10);
                 }
             }
         }, 0L, 20L);

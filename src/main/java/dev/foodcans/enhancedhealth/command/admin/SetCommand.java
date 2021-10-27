@@ -1,10 +1,10 @@
 package dev.foodcans.enhancedhealth.command.admin;
 
-import dev.foodcans.enhancedhealth.command.HealthCommand;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;
 import dev.foodcans.enhancedhealth.settings.Config;
 import dev.foodcans.enhancedhealth.settings.lang.Lang;
-import dev.foodcans.enhancedhealth.util.UUIDFetcher;
+import dev.foodcans.pluginutils.command.SubCommand;
+import dev.foodcans.pluginutils.mojang.UUIDFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,11 +12,16 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class SetCommand extends HealthCommand
+import static dev.foodcans.pluginutils.PluginUtils.Numbers.isDouble;
+
+public class SetCommand extends SubCommand
 {
+    private final HealthDataManager healthDataManager;
+
     public SetCommand(HealthDataManager healthDataManager)
     {
-        super(healthDataManager, "set", "enhancedhealth.command.set", Arrays.asList("<player>", "<amount>"));
+        super("set", "enhancedhealth.command.set", Arrays.asList("<player>", "<amount>"));
+        this.healthDataManager = healthDataManager;
     }
 
     @Override
@@ -42,7 +47,8 @@ public class SetCommand extends HealthCommand
             }
         } else if (result == HealthDataManager.Result.OVER_MAX)
         {
-            Lang.EXTRA_HEALTH_SET_OVER_MAX.sendMessage(sender, playerName, Double.toString(amount), Double.toString(Config.MAX_EXTRA_HEALTH_ALLOWED));
+            Lang.EXTRA_HEALTH_SET_OVER_MAX.sendMessage(sender, playerName, Double.toString(amount),
+                    Double.toString(Config.MAX_EXTRA_HEALTH_ALLOWED));
         } else
         {
             Lang.EXTRA_HEALTH_SET_UNDER_ZERO.sendMessage(sender, playerName, Double.toString(amount));

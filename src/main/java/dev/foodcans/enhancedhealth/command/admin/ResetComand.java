@@ -1,10 +1,10 @@
 package dev.foodcans.enhancedhealth.command.admin;
 
-import dev.foodcans.enhancedhealth.command.HealthCommand;
 import dev.foodcans.enhancedhealth.data.HealthData;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;
 import dev.foodcans.enhancedhealth.settings.lang.Lang;
-import dev.foodcans.enhancedhealth.util.UUIDFetcher;
+import dev.foodcans.pluginutils.command.SubCommand;
+import dev.foodcans.pluginutils.mojang.UUIDFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,11 +12,14 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.UUID;
 
-public class ResetComand extends HealthCommand
+public class ResetComand extends SubCommand
 {
+    private final HealthDataManager healthDataManager;
+
     public ResetComand(HealthDataManager healthDataManager)
     {
-        super(healthDataManager, "reset", "enhancedhealth.command.reset", Collections.singletonList("<player>"));
+        super("reset", "enhancedhealth.command.reset", Collections.singletonList("<player>"));
+        this.healthDataManager = healthDataManager;
     }
 
     @Override

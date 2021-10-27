@@ -5,7 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import dev.foodcans.enhancedhealth.EnhancedHealth;
 import dev.foodcans.enhancedhealth.data.HealthData;
 import dev.foodcans.enhancedhealth.settings.Config;
-import dev.foodcans.enhancedhealth.util.Callback;
+import dev.foodcans.pluginutils.Callback;
 import org.bukkit.Bukkit;
 
 import java.sql.Connection;
@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class MySQLStorage implements IStorage
 {
-    private HikariDataSource dataSource;
+    private final HikariDataSource dataSource;
 
     public MySQLStorage()
     {
@@ -30,7 +30,8 @@ public class MySQLStorage implements IStorage
         hikariConfig.addDataSourceProperty("prepStmtCacheSize", "250");
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         hikariConfig.addDataSourceProperty("useServerPrepStmts", "true");
-        hikariConfig.addDataSourceProperty("allowPublicKeyRetrieval", Config.DB_ALLOW_PUBLIC_KEY_RETRIEVAL);
+        hikariConfig.addDataSourceProperty("allowPublicKeyRetrieval",
+                Config.DB_ALLOW_PUBLIC_KEY_RETRIEVAL);
         hikariConfig.addDataSourceProperty("useSSL", Config.DB_USE_SSL);
         this.dataSource = new HikariDataSource(hikariConfig);
 
@@ -62,7 +63,8 @@ public class MySQLStorage implements IStorage
     @Override
     public void saveStorage(HealthData healthData)
     {
-        Bukkit.getScheduler().runTaskAsynchronously(EnhancedHealth.getInstance(), () -> saveData(healthData));
+        Bukkit.getScheduler()
+                .runTaskAsynchronously(EnhancedHealth.getInstance(), () -> saveData(healthData));
     }
 
     @Override
@@ -138,6 +140,7 @@ public class MySQLStorage implements IStorage
 
     private static class Queries
     {
+
         public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS enhancedhealth(uuid CHAR(36) NOT NULL,extra_health DOUBLE,health DOUBLE,PRIMARY KEY (uuid))";
         public static final String INSERT = "INSERT INTO enhancedhealth (uuid,extra_health,health) VALUES(?,?,?) ON DUPLICATE KEY UPDATE extra_health=?,health=?";
         public static final String GET = "SELECT extra_health,health FROM enhancedhealth WHERE uuid=?";

@@ -1,9 +1,9 @@
 package dev.foodcans.enhancedhealth.command.admin;
 
-import dev.foodcans.enhancedhealth.command.HealthCommand;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;
 import dev.foodcans.enhancedhealth.settings.lang.Lang;
-import dev.foodcans.enhancedhealth.util.UUIDFetcher;
+import dev.foodcans.pluginutils.command.SubCommand;
+import dev.foodcans.pluginutils.mojang.UUIDFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,11 +11,16 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class RemoveCommand extends HealthCommand
+import static dev.foodcans.pluginutils.PluginUtils.Numbers.isDouble;
+
+public class RemoveCommand extends SubCommand
 {
+    private final HealthDataManager healthDataManager;
+
     public RemoveCommand(HealthDataManager healthDataManager)
     {
-        super(healthDataManager, "remove", "enhancedhealth.command.remove", Arrays.asList("<player>", "<amount>"));
+        super("remove", "enhancedhealth.command.remove", Arrays.asList("<player>", "<amount>"));
+        this.healthDataManager = healthDataManager;
     }
 
     @Override

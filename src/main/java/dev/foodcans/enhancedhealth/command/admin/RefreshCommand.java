@@ -1,19 +1,22 @@
 package dev.foodcans.enhancedhealth.command.admin;
 
-import dev.foodcans.enhancedhealth.command.HealthCommand;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;
 import dev.foodcans.enhancedhealth.settings.lang.Lang;
+import dev.foodcans.pluginutils.command.SubCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
 
-public class RefreshCommand extends HealthCommand
+public class RefreshCommand extends SubCommand
 {
+    private final HealthDataManager healthDataManager;
+
     public RefreshCommand(HealthDataManager healthDataManager)
     {
-        super(healthDataManager, "refresh", "enhancedhealth.command.refresh", Collections.singletonList("<player>"));
+        super("refresh", "enhancedhealth.command.refresh", Collections.singletonList("<player>"));
+        this.healthDataManager = healthDataManager;
     }
 
     @Override
