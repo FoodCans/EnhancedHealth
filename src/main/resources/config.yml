@@ -11,6 +11,10 @@
 # Storage Settings #
 ####################
 
+# Should the plugin attempt to migrate data from one storage type to the other? (Will delete old data)
+# Note: Whatever Storage-Type is set to, data will be pulled from the opposite type if available.
+# Note: Make sure to turn off this setting after using it, or you might run into issues.
+Migrate: false
 # Json, MySQL
 Storage-Type: Json
 MySQL:

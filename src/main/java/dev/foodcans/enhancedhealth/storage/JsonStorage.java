@@ -106,4 +106,14 @@ public class JsonStorage implements IStorage
             Bukkit.getScheduler().runTask(EnhancedHealth.getInstance(), () -> callback.call(data));
         });
     }
+
+    @Override
+    public void deleteStorage()
+    {
+        for (File file : playersFolder.listFiles())
+        {
+            file.delete();
+        }
+        playersFolder.delete();
+    }
 }

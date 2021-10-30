@@ -133,6 +133,19 @@ public class MySQLStorage implements IStorage
         });
     }
 
+    @Override
+    public void deleteStorage()
+    {
+        try (Connection connection = getConnection())
+        {
+            PreparedStatement statement = connection.prepareStatement(Queries.DROP_TABLE);
+            statement.executeUpdate();
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     private Connection getConnection() throws SQLException
     {
         return dataSource.getConnection();
@@ -142,6 +155,7 @@ public class MySQLStorage implements IStorage
     {
 
         public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS enhancedhealth(uuid CHAR(36) NOT NULL,extra_health DOUBLE,health DOUBLE,PRIMARY KEY (uuid))";
+        public static final String DROP_TABLE = "DROP TABLE IF EXISTS enhancedhealth";
         public static final String INSERT = "INSERT INTO enhancedhealth (uuid,extra_health,health) VALUES(?,?,?) ON DUPLICATE KEY UPDATE extra_health=?,health=?";
         public static final String GET = "SELECT extra_health,health FROM enhancedhealth WHERE uuid=?";
         public static final String GET_UUIDS = "SELECT uuid FROM enhancedhealth";

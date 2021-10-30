@@ -17,4 +17,6 @@ public interface IStorage
     void saveData(HealthData healthData);
 
     void getAllData(Callback<Set<HealthData>> callback);
+
+    void deleteStorage();
 }

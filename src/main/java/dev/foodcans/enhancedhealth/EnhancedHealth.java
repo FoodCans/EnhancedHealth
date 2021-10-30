@@ -13,7 +13,7 @@ import dev.foodcans.enhancedhealth.storage.MySQLStorage;
 import dev.foodcans.pluginutils.command.FailureReason;
 import dev.foodcans.pluginutils.command.PluginCommand;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,8 +25,6 @@ public class EnhancedHealth extends JavaPlugin
     private LangFile langFile;
     private IStorage storage;
     private HealthDataManager healthDataManager;
-
-    private volatile boolean migrating = false;
 
     public static EnhancedHealth getInstance()
     {
@@ -45,19 +43,10 @@ public class EnhancedHealth extends JavaPlugin
     @Override
     public void onEnable()
     {
-        switch (Config.STORAGE_TYPE)
+        if (!setupStorage())
         {
-            case JSON:
-                storage = new JsonStorage(new File(this.getDataFolder(), "players"));
-                break;
-            case MYSQL:
-                storage = new MySQLStorage();
-                break;
-            default:
-                setEnabled(false);
-                Bukkit.getLogger().severe(
-                        "Incorrect storage type. Please use either Json or MySQL! Disabling plugin....");
-                return;
+            getServer().getPluginManager().disablePlugin(this);
+            return;
         }
 
         this.healthDataManager = new HealthDataManager();
@@ -76,30 +65,50 @@ public class EnhancedHealth extends JavaPlugin
         }
     }
 
-    public void migrate(CommandSender sender)
+    private boolean setupStorage()
     {
-        migrating = true;
-        storage.getAllData((result ->
+        switch (Config.STORAGE_TYPE)
         {
-            Config.StorageType from;
-            Config.StorageType to;
-            if (storage instanceof JsonStorage)
-            {
-                // Migrate to MySQL
-                storage = new MySQLStorage();
-                from = Config.StorageType.JSON;
-                to = Config.StorageType.MYSQL;
-            } else
-            {
-                // Migrate to Json
+            case JSON:
                 storage = new JsonStorage(new File(this.getDataFolder(), "players"));
-                from = Config.StorageType.MYSQL;
-                to = Config.StorageType.JSON;
-            }
-            result.forEach(storage::saveStorage);
-            Lang.DATA_MIGRATED.sendMessage(sender, from.name(), to.name());
-            migrating = false;
-        }));
+                if (Config.MIGRATE)
+                {
+                    try
+                    {
+                        MySQLStorage mySQLStorage = new MySQLStorage();
+                        mySQLStorage.getAllData((result -> result.forEach(storage::saveStorage)));
+                        mySQLStorage.deleteStorage();
+                        Bukkit.getLogger().warning(ChatColor.GREEN + "MySQL data migrated to Json!");
+                    } catch (Exception e)
+                    {
+                        // MySQL Not available
+                        Bukkit.getLogger().warning(ChatColor.RED + "MySQL data not available to migrate to Json!");
+                    }
+                }
+                return true;
+            case MYSQL:
+                storage = new MySQLStorage();
+                if (Config.MIGRATE)
+                {
+                    try
+                    {
+                        JsonStorage jsonStorage = new JsonStorage(new File(this.getDataFolder(), "players"));
+                        jsonStorage.getAllData((result -> result.forEach(storage::saveStorage)));
+                        jsonStorage.deleteStorage();
+                        Bukkit.getLogger().warning(ChatColor.GREEN + "Json data migrated to MySQL!");
+                    } catch (Exception e)
+                    {
+                        // Json Not available
+                        Bukkit.getLogger().warning(ChatColor.RED + "Json data not available to migrate to MySQL!");
+                    }
+                }
+                return true;
+            default:
+                // Wrong storage type entered
+                Bukkit.getLogger().severe(
+                        "Incorrect storage type. Please use either Json or MySQL! Disabling plugin....");
+                return false;
+        }
     }
 
     private void setupCommands()
@@ -135,13 +144,8 @@ public class EnhancedHealth extends JavaPlugin
         pluginCommand.registerSubCommand(new AddCommand(healthDataManager),
                 new RemoveCommand(healthDataManager), new SetCommand(healthDataManager),
                 new RefreshCommand(healthDataManager), new ReloadCommand(healthDataManager),
-                new ResetComand(healthDataManager), new StatusCommand(healthDataManager), new MigrateCommand());
+                new ResetComand(healthDataManager), new StatusCommand(healthDataManager));
         getCommand("health").setExecutor(pluginCommand);
-    }
-
-    public boolean isMigrating()
-    {
-        return migrating;
     }
 
     public LangFile getLangFile()
