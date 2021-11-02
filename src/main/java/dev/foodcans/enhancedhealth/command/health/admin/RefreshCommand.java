@@ -1,8 +1,6 @@
-package dev.foodcans.enhancedhealth.command.admin;
+package dev.foodcans.enhancedhealth.command.health.admin;
 
-import dev.foodcans.enhancedhealth.EnhancedHealth;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;
-import dev.foodcans.enhancedhealth.settings.Config;
 import dev.foodcans.enhancedhealth.settings.lang.Lang;
 import dev.foodcans.pluginutils.command.SubCommand;
 import org.bukkit.Bukkit;
@@ -11,40 +9,42 @@ import org.bukkit.entity.Player;
 
 import java.util.Collections;
 
-public class ReloadCommand extends SubCommand
+public class RefreshCommand extends SubCommand
 {
     private final HealthDataManager healthDataManager;
 
-    public ReloadCommand(HealthDataManager healthDataManager)
+    public RefreshCommand(HealthDataManager healthDataManager)
     {
-        super("reload", "enhancedhealth.command.reload", Collections.emptyList());
+        super("refresh", "enhancedhealth.command.refresh", Collections.singletonList("<player>"));
         this.healthDataManager = healthDataManager;
     }
 
     @Override
     public void onCommand(CommandSender sender, String... args)
     {
-        EnhancedHealth.getInstance().reloadConfig();
-        EnhancedHealth.getInstance().getLangFile().reload();
-        Config.load(EnhancedHealth.getInstance().getConfig());
-        for (Player player : Bukkit.getOnlinePlayers())
+        String playerName = args[0];
+        Player player = Bukkit.getPlayer(playerName);
+        if (player != null)
         {
             healthDataManager.applyMaxHealthToPlayer(player, true);
             healthDataManager.applyHealthToPlayer(player);
+            Lang.PLAYER_REFRESHED.sendMessage(sender, player.getName());
+        } else
+        {
+            Lang.PLAYER_NOT_FOUND.sendMessage(sender, playerName);
         }
-        Lang.CONFIG_RELOADED.sendMessage(sender);
     }
 
     @Override
     public int getMinArgs()
     {
-        return 0;
+        return 1;
     }
 
     @Override
     public int getMaxArgs()
     {
-        return 0;
+        return 1;
     }
 
     @Override

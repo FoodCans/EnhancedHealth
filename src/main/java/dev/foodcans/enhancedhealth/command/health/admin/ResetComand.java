@@ -1,4 +1,4 @@
-package dev.foodcans.enhancedhealth.command.admin;
+package dev.foodcans.enhancedhealth.command.health.admin;
 
 import dev.foodcans.enhancedhealth.data.HealthData;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;

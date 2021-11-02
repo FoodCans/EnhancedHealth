@@ -1,7 +1,8 @@
 package dev.foodcans.enhancedhealth;
 
-import dev.foodcans.enhancedhealth.command.admin.*;
-import dev.foodcans.enhancedhealth.command.player.StatusCommand;
+import dev.foodcans.enhancedhealth.command.HealCommand;
+import dev.foodcans.enhancedhealth.command.health.admin.*;
+import dev.foodcans.enhancedhealth.command.health.player.StatusCommand;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;
 import dev.foodcans.enhancedhealth.listener.PlayerListener;
 import dev.foodcans.enhancedhealth.settings.Config;
@@ -146,6 +147,7 @@ public class EnhancedHealth extends JavaPlugin
                 new RefreshCommand(healthDataManager), new ReloadCommand(healthDataManager),
                 new ResetComand(healthDataManager), new StatusCommand(healthDataManager));
         getCommand("health").setExecutor(pluginCommand);
+        getCommand("heal").setExecutor(new HealCommand(healthDataManager));
     }
 
     public LangFile getLangFile()

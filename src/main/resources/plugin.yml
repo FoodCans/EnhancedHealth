@@ -7,3 +7,5 @@ libraries: [ 'com.zaxxer:HikariCP:4.0.3', 'com.google.code.gson:gson:2.8.8' ]
 commands:
   health:
     description: Manage player health data
+  heal:
+    description: Heal yourself or another player

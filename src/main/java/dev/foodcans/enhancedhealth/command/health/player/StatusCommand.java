@@ -1,4 +1,4 @@
-package dev.foodcans.enhancedhealth.command.player;
+package dev.foodcans.enhancedhealth.command.health.player;
 
 import dev.foodcans.enhancedhealth.data.HealthData;
 import dev.foodcans.enhancedhealth.data.HealthDataManager;
