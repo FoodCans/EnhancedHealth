@@ -29,7 +29,7 @@ public enum Lang
     PLAYER_REFRESHED("Player-Refreshed", "&8<&9Health&8> &7Health data refreshed for &f{0}&7!"),
     PLAYER_RESET("Player-Reset", "&8<&9Health&8> &7Health data reset for &f{0}&7!"),
 
-    PLAYER_HEALED("Player-Healed", "&f{0} has been healed!"),
+    PLAYER_HEALED("Player-Healed", "&f{0} &7has been healed!"),
     SELF_HEALED("Self-Healed", "&7You have been healed!"),
 
     CONFIG_RELOADED("Config-Reloaded", "&8<&9Health&8> &7Config and players reloaded!"),
